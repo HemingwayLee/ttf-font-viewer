@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>.ttf Font Viewer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="container">  
+    <div id="myjumbotron" class="jumbotron mt-3">
+      <h1>.ttf Font Viewer</h1>
+      <label for="word">upload an .ttf font file:</label>
+      <input id="myfile" name="myfile" type="file"/>
+      <label for="word">input your text:</label>
+      <div class="input-group">  
+        <textarea rows="15" cols="150" class="form-control" id="word"></textarea>
+      </div>
+      <hr>
+      <!-- Add white-space: pre-wrap; for line break -->
+      <div id="res" style="white-space: pre-wrap; font-family: Times; font-size: 48px; background-color: white; padding: 10px;">
+      </div>
+    </div>
+  </div>
+  <script>
+    function handleWordInput() {
+      $("#res").text($("#word").val());
+    }
+
+    async function handleFontFile(e) {  
+      var url = URL.createObjectURL(e.target.files[0]);
+      loadFonts(url);
+    }
+
+    async function loadFonts(url) {
+      const font = new FontFace("font-family myfont", `url(${url})`, {
+        style: "normal",
+        // weight: "400",
+        // stretch: "condensed",
+      });
+      
+      await font.load();
+      document.fonts.add(font);
+      document.body.classList.add("myfont");
+
+      $('#res').css('font-family', 'myfont');
+    }
+
+    $(document).ready(function() {
+      document.getElementById('myfile').addEventListener('change', handleFontFile);
+      document.getElementById('word').addEventListener('input', handleWordInput);
+    });
+  </script>
+</body>
+</html>
